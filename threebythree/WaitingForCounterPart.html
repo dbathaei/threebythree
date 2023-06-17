@@ -1,0 +1,40 @@
+{{ extends 'otree/WaitPage.html' }}
+{{ block title }}Thank you for your time!{{ endblock }}
+{{ block content }}
+<style>
+    body {
+        background-color: white;
+    }
+    .card {
+        font-size: 1.2rem;
+        width: 60%;
+        height: auto;
+        text-align: center;
+        padding: 50px;
+        border: 1px solid rgb(165, 215, 193);
+        border-radius: 2rem;
+        background-color: #ffeeaa;
+        color: #b36200;
+        box-shadow: rgba(187, 187, 44, .2) 0 -25px 18px -14px inset,rgba(187, 187, 44, .15) 0 1px 2px,rgba(187, 187, 44, .15) 0 2px 4px,rgba(187, 187, 44, .15) 0 4px 8px,rgba(187, 187, 44, .15) 0 8px 16px,rgba(187, 187, 44, .15) 0 16px 32px;
+
+        margin-right: auto;
+        margin-left: auto;
+        margin-bottom: 20px;
+    }
+
+    .card-header {
+        background-color: #ffeeaa;
+        border: none;
+    }
+    .card-body {
+        background-color: beige;
+        border-radius: 2rem;
+    }
+    .progress {
+        display: none;
+    }
+</style>
+    <p>
+        Now we just wait for others to finish their game. Once everyone is done, we will calculate payments and notify you. Feel free to close this tab.
+    </p>
+{{ endblock }}

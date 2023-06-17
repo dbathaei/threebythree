@@ -1,0 +1,42 @@
+{{ block title }}
+    <div align="center">Take a moment</div>
+{{ endblock }}
+
+{{ block content }}
+<style>
+    .ExpButton {
+        background-color: #ffeeaa;
+        border-radius: 100px;
+        box-shadow: rgba(187, 187, 44, .2) 0 -25px 18px -14px inset,rgba(187, 187, 44, .15) 0 1px 2px,rgba(187, 187, 44, .15) 0 2px 4px,rgba(187, 187, 44, .15) 0 4px 8px,rgba(187, 187, 44, .15) 0 8px 16px,rgba(187, 187, 44, .15) 0 16px 32px;
+        color: #b36200;
+        cursor: pointer;
+        display: inline-block;
+        padding: 7px 20px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 250ms;
+        border: 0;
+        font-size: 16px;
+        touch-action: manipulation;
+    }
+
+    .ExpButton:hover {
+        box-shadow: rgba(187, 187, 44,.35) 0 -25px 18px -14px inset,rgba(187, 187, 44,.25) 0 1px 2px,rgba(187, 187, 44,.25) 0 2px 4px,rgba(187, 187, 44,.25) 0 4px 8px,rgba(187, 187, 44,.25) 0 8px 16px,rgba(187, 187, 44,.25) 0 16px 32px;
+        transform: scale(1.05);
+        }
+</style>
+<table style="width: 100;">
+    <div style="text-align: center;">
+        <p> 1000 milliseconds before the button shows up!</p>
+        <button class="ExpButton" id="NextButton"> Let's keep going! </button>
+    </div>
+</table>
+<script>
+    document.getElementById("NextButton").style.visibility = 'hidden';
+
+    function ShowNextButton() {
+        document.getElementById("NextButton").style.visibility = 'visible';
+    };
+    setTimeout(ShowNextButton, 1000);
+</script>
+{{ endblock }}

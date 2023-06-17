@@ -1,0 +1,119 @@
+{{ block title }}
+    <div align="center"> Play as Orange </div>
+{{ endblock }}
+{{ block content }}
+<style>
+    .IntroTable {
+        width: 30rem;
+        text-align: center;
+    }
+
+    .IntroTable th, td {
+        border: 2px solid black;
+        padding: 5px;
+    }
+    
+    .IntroTable th {
+        background-color: bisque;
+    }
+
+    #rotassury {
+        transform: rotate(-90deg);
+    }
+
+    .YouPlayer {
+        font-weight: bold;
+        color: #ff7b00;
+    }
+
+    .OpponentPlayer {
+        font-weight: bold;
+        color: #4B5320;
+    }
+    .ExpButton {
+        background-color: #ffeeaa;
+        border-radius: 100px;
+        box-shadow: rgba(187, 187, 44, .2) 0 -25px 18px -14px inset,rgba(187, 187, 44, .15) 0 1px 2px,rgba(187, 187, 44, .15) 0 2px 4px,rgba(187, 187, 44, .15) 0 4px 8px,rgba(187, 187, 44, .15) 0 8px 16px,rgba(187, 187, 44, .15) 0 16px 32px;
+        color: #b36200;
+        cursor: pointer;
+        display: inline-block;
+        padding: 7px 20px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 250ms;
+        border: 0;
+        font-size: 16px;
+        touch-action: manipulation;
+    }
+
+    .ExpButton:hover {
+        box-shadow: rgba(187, 187, 44,.35) 0 -25px 18px -14px inset,rgba(187, 187, 44,.25) 0 1px 2px,rgba(187, 187, 44,.25) 0 2px 4px,rgba(187, 187, 44,.25) 0 4px 8px,rgba(187, 187, 44,.25) 0 8px 16px,rgba(187, 187, 44,.25) 0 16px 32px;
+        transform: scale(1.05);
+        }
+</style>
+
+    <table class="IntroTable" align="center">
+        <tr>
+            <th colspan="2" rowspan="2"></th>
+            
+            <th colspan="4" style="font-weight: bold;"> Opponent</th>
+        </tr>
+        <tr style="font-weight: bold;">
+            <td> <span class="OpponentPlayer">D</span> </td>
+            <td> <span class="OpponentPlayer">E</span> </td>
+            <td> <span class="OpponentPlayer">F</span> </td>
+        </tr>
+        <tr>
+            <th rowspan="4"> <span id="rotassury" style="font-weight: bold;">You</th>
+            {{ if player.role == 'Orange' }}
+            <td style="font-weight: bold;"> <span class="YouPlayer">A</span> </td>
+            <td><span class="YouPlayer">{{ C00_0 }}</span>, <span class="OpponentPlayer">{{ C00_1 }}</span> </td>
+            <td><span class="YouPlayer">{{ C01_0 }}</span>, <span class="OpponentPlayer">{{ C01_1 }}</span> </td>
+            <td><span class="YouPlayer">{{ C02_0 }}</span>, <span class="OpponentPlayer">{{ C02_1 }}</span> </td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;"> <span class="YouPlayer">B</span> </td>
+            <td><span class="YouPlayer">{{ C10_0 }}</span>, <span class="OpponentPlayer">{{ C10_1 }}</span> </td>
+            <td><span class="YouPlayer">{{ C11_0 }}</span>, <span class="OpponentPlayer">{{ C11_1 }}</span> </td>
+            <td><span class="YouPlayer">{{ C12_0 }}</span>, <span class="OpponentPlayer">{{ C12_1 }}</span> </td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;"> <span class="YouPlayer">C</span> </td>
+            <td><span class="YouPlayer">{{ C20_0 }}</span>, <span class="OpponentPlayer">{{ C20_1 }}</span> </td>
+            <td><span class="YouPlayer">{{ C21_0 }}</span>, <span class="OpponentPlayer">{{ C21_1 }}</span> </td>
+            <td><span class="YouPlayer">{{ C22_0 }}</span>, <span class="OpponentPlayer">{{ C22_1 }}</span> </td>
+        </tr>
+            {{ else }}
+            <td style="font-weight: bold;"> <span class="YouPlayer">A</span> </td>
+            <td><span class="YouPlayer">{{ C00_1 }}</span>, <span class="OpponentPlayer">{{ C00_0 }}</span> </td>
+            <td><span class="YouPlayer">{{ C10_1 }}</span>, <span class="OpponentPlayer">{{ C10_0 }}</span> </td>
+            <td><span class="YouPlayer">{{ C20_1 }}</span>, <span class="OpponentPlayer">{{ C20_0 }}</span> </td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;"> <span class="YouPlayer">B</span> </td>
+            <td><span class="YouPlayer">{{ C01_1 }}</span>, <span class="OpponentPlayer">{{ C01_0 }}</span> </td>
+            <td><span class="YouPlayer">{{ C11_1 }}</span>, <span class="OpponentPlayer">{{ C11_0 }}</span> </td>
+            <td><span class="YouPlayer">{{ C21_1 }}</span>, <span class="OpponentPlayer">{{ C21_0 }}</span> </td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;"> <span class="YouPlayer">C</span> </td>
+            <td><span class="YouPlayer">{{ C02_1 }}</span>, <span class="OpponentPlayer">{{ C02_0 }}</span> </td>
+            <td><span class="YouPlayer">{{ C12_1 }}</span>, <span class="OpponentPlayer">{{ C12_0 }}</span> </td>
+            <td><span class="YouPlayer">{{ C22_1 }}</span>, <span class="OpponentPlayer">{{ C22_0 }}</span> </td>
+        </tr>
+            {{ endif }}
+    </table>
+
+    {{ formfields }}
+    <div style="text-align: center;">
+        <button class="ExpButton" id="NextButton"> Let's keep going! </button>
+    </div>
+<script>
+    document.getElementById("NextButton").style.visibility = 'hidden';
+
+    function ShowNextButton() {
+        document.getElementById("NextButton").style.visibility = 'visible';
+    };
+    setTimeout(ShowNextButton, 3000);
+</script>
+{{ endblock }}

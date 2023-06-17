@@ -1,0 +1,39 @@
+{{ block title }}
+    <div align="center">All done!</div>
+{{ endblock }}
+
+{{ block content }}
+<style>
+    .ResultsTable {
+        margin-top: 3rem;
+        text-align: center;
+        width: 30rem;
+
+    }
+    
+    .ResultsTable th, td {
+        border: 2px solid black;
+        padding: 5px;
+    }
+
+    .ResultsTable th {
+        
+        font-weight: bold;
+        background-color: bisque;
+    }
+
+    .YouPlayer {
+        font-weight: bold;
+        color: #ff7b00;
+    }
+
+    .OpponentPlayer {
+        font-weight: bold;
+        color: #4B5320;
+    }
+</style>
+
+    <div align="center">Your counterpart has finished playing their game. The app has randomly chosen round {{ C.PAYOFF_ROUND }} 
+        as your payoff round. Your total result is: {{ participant.payoff_plus_participation_fee() }}.
+    </div>
+{{ endblock }}

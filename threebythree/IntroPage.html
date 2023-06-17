@@ -1,0 +1,169 @@
+{{ block title }}
+    <div align="center">3x3 Game</div>
+{{ endblock }}
+
+{{ block content }}
+<style>
+    .ExampleTable {
+        width: 60%;
+        text-align: center;
+        font-weight: bolder;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .ExampleTable td {
+        width: 20%;
+    }
+    
+    .IntroTable {
+        width: 30rem;
+        text-align: center;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .IntroTablethtd {
+        border: 2px solid black;
+        padding: 5px;
+    }
+    
+    .IntroTable th {
+        background-color: bisque;
+    }
+
+    #rotassury {
+        transform-style: rotate(-90deg);
+    }
+
+    .YouPlayer {
+        font-weight: bold;
+        color: #ff7b00;
+    }
+
+    .OpponentPlayer {
+        font-weight: bold;
+        color: #4B5320;
+    }
+
+    .ExpButton {
+        background-color: #ffeeaa;
+        border-radius: 100px;
+        box-shadow: rgba(187, 187, 44, .2) 0 -25px 18px -14px inset,rgba(187, 187, 44, .15) 0 1px 2px,rgba(187, 187, 44, .15) 0 2px 4px,rgba(187, 187, 44, .15) 0 4px 8px,rgba(187, 187, 44, .15) 0 8px 16px,rgba(187, 187, 44, .15) 0 16px 32px;
+        color: #b36200;
+        cursor: pointer;
+        display: inline-block;
+        padding: 7px 20px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 250ms;
+        border: 0;
+        font-size: 16px;
+        touch-action: manipulation;
+    }
+
+    .ExpButton:hover {
+        box-shadow: rgba(187, 187, 44,.35) 0 -25px 18px -14px inset,rgba(187, 187, 44,.25) 0 1px 2px,rgba(187, 187, 44,.25) 0 2px 4px,rgba(187, 187, 44,.25) 0 4px 8px,rgba(187, 187, 44,.25) 0 8px 16px,rgba(187, 187, 44,.25) 0 16px 32px;
+        transform: scale(1.05);
+        }
+</style>
+
+    <p>
+        A 3x3 game refers to an interaction between two players where each player has three strategies to choose from.
+        There are 9 unique outcomes. For each outcome, there is a 'payoff' for either player.</p>
+    <p>In the example below, <b style="color: #ff7b00;">You</b> choose from the following options:</p>
+    <table class="ExampleTable" align="center">
+        <tr style="color: #ff7b00;">
+            <td>A</td>
+            <td>B</td>
+            <td>C</td>
+        </tr>
+    </table>
+    <p>Your <b style="color:#4B5320;">Opponent</b> chooses from the following options:</p>
+
+
+    <table class="ExampleTable" align="center">
+        <tr style="color:#4B5320;">
+            <td>D</td>
+            <td>E</td>
+            <td>F</td>
+        </tr>
+    </table>
+
+    <p>
+        For each combination of choices, there is a payoff for both players. We show all of the possible payoffs using a
+    <b>Payoff Matrix</b>:
+    </p>
+
+    <table class="IntroTable" align="center">
+        <tr>
+            <th class="IntroTablethtd" colspan="2" rowspan="2"></th>
+            <th class="IntroTablethtd" colspan="4" style="font-weight: bold;"> Opponent</th>
+        </tr>
+        <tr style="font-weight: bold;">
+            <td class="IntroTablethtd"> <span class="OpponentPlayer">D</span> </td>
+            <td class="IntroTablethtd"> <span class="OpponentPlayer">E</span> </td>
+            <td class="IntroTablethtd"> <span class="OpponentPlayer">F</span> </td>
+        </tr>
+        <tr>
+            <th class="IntroTablethtd" rowspan="4"> <span id="rotassury" style="font-weight: bold;">You</th>
+            <td class="IntroTablethtd" style="font-weight: bold;"><span class="YouPlayer">A</span></td>
+            <td class="IntroTablethtd"><span class="YouPlayer">50</span>, <span class="OpponentPlayer">10</span> </td>
+            <td class="IntroTablethtd"><span class="YouPlayer">20</span>, <span class="OpponentPlayer">40</span> </td>
+            <td class="IntroTablethtd"><span class="YouPlayer">10</span>, <span class="OpponentPlayer">30</span> </td>
+        </tr>
+        <tr>
+            <td class="IntroTablethtd" style="font-weight: bold;"> <span class="YouPlayer">B</span> </td>
+            <td class="IntroTablethtd"><span class="YouPlayer">40</span>, <span class="OpponentPlayer">20</span> </td>
+            <td class="IntroTablethtd"><span class="YouPlayer">30</span>, <span class="OpponentPlayer">20</span> </td>
+            <td class="IntroTablethtd"><span class="YouPlayer">20</span>, <span class="OpponentPlayer">30</span> </td>
+        </tr>
+        <tr>
+            <td class="IntroTablethtd" style="font-weight: bold;"> <span class="YouPlayer">C</span> </td>
+            <td class="IntroTablethtd"><span class="YouPlayer">10</span>, <span class="OpponentPlayer">30</span> </td>
+            <td class="IntroTablethtd"><span class="YouPlayer">10</span>, <span class="OpponentPlayer">10</span> </td>
+            <td class="IntroTablethtd"><span class="YouPlayer">30</span>, <span class="OpponentPlayer">50</span> </td>
+        </tr>
+    </table>
+
+    <p>
+        In this game, if you choose 
+        <span class="YouPlayer">A</span>
+        and your opponent chooses 
+        <span class="OpponentPlayer">E</span>,
+        your payoff will be <span class="YouPlayer">20</span> points and your opponent's payoff will be <span class="OpponentPlayer">40</span>.
+    </p>
+
+    <table class="IntroTable" style="width: 10rem;" align="center">
+        <tr>
+            <td></td>
+            <th class="IntroTablethtd"><span class="OpponentPlayer">E</span></th>
+        </tr>
+        <tr>
+            <th class="IntroTablethtd"><span class="YouPlayer">A</span></th>
+            <td class="IntroTablethtd"><span class="YouPlayer">20</span>,<span class="OpponentPlayer">40</span></td>
+        </tr>
+    </table>
+
+    <p>
+        You will play for 5 rounds. At the end of your task, one round will be chosen at random and your payoff will be calculated based on
+        the outcome of that round. You will receive $0.10 for every point you achieve in the game.
+
+        For example, if the result of the randomly selected round is the same as the above matrix, you will receive $2 and your
+        opponent will receive $4.
+    </p>
+
+    <div align="center">
+        <button aling="center" style="margin-top: 3rem;" class="ExpButton" id="NextButton"> Let's keep going! </button>
+    </div>
+<script>
+    document.getElementById("NextButton").style.visibility = 'hidden';
+
+    function ShowNextButton() {
+        document.getElementById("NextButton").style.visibility = 'visible';
+    };
+    setTimeout(ShowNextButton, 30000);
+</script>
+
+{{ endblock }}
+

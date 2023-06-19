@@ -16,7 +16,7 @@ class C(BaseConstants):
     GREEN_ROLE = 'Green'
 
     # For now we have a fixed number of rounds.
-    NUM_ROUNDS = 20
+    NUM_ROUNDS = 15
 
 
     # Choices that an individual player sees. A,B,C is what they see on the screen and 0,1,2 is the input we take from them.
@@ -25,6 +25,25 @@ class C(BaseConstants):
             [1, "B"],
             [2, "C"],
         ]
+    
+
+    PAYOFF_ROUND = r.randint(1, NUM_ROUNDS)
+    WHICHGAME_LIST = []
+
+    WHICHGAMEVALUE = int(( NUM_ROUNDS - 5 ) / 2)
+    for i in range(WHICHGAMEVALUE):
+        WHICHGAME_LIST.append(i+1)
+        WHICHGAME_LIST.append(i+1)
+    r.shuffle(WHICHGAME_LIST)
+    for i in range(5):
+        WHICHGAME_LIST.append(i+1)
+    
+    COINTOSS = []
+    for i in range(NUM_ROUNDS-5):
+        COINTOSS.append(1)
+    for i in range(5):
+        COINTOSS.append(0)
+    r.shuffle(COINTOSS)
 
 
     PAYOFF_DICT_LIST = {}
@@ -39,20 +58,15 @@ class C(BaseConstants):
     for round in range(NUM_ROUNDS):
         PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"] = {}
         PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"]["key_identifier"] = f"random_round_{ round + 1 }"
+        PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"]["whichgame_value"] = f"game_number_{ WHICHGAME_LIST[round] }"
+        PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"]["cointoss_value"] = f"coin_toss_{ COINTOSS[round] }"
         for i in range(3):
             for j in range(3):
                 for k in range(2):
                     PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"][f"C{i}{j}_{k}"] = 10 * r.randint(1,9)
 
     # randomly decides which round is the one that pays the players. Is between 1 and NUM_ROUNDS inclusive.
-    PAYOFF_ROUND = r.randint(1, NUM_ROUNDS)
-    WHICHGAME_LIST = [1,2,3,4,5,1,2,3,4,5]
-    r.shuffle(WHICHGAME_LIST)
-    for i in range(5):
-        WHICHGAME_LIST.append(i+1)
-    
-    COINTOSS = [1,1,1,1,1,1,1,1,1,1,0,0,0,0,0]
-    r.shuffle(COINTOSS)
+
 
 
 class Subsession(BaseSubsession):
@@ -205,7 +219,7 @@ class DecisionPage(Page):
                     payoff_for_this_round = Subsession.FIXED_DICT_LIST[f"fixed_round_{WhichGame}"]
                 else:
                     pass
-        elif 15 - player.round_number == len(Subsession.FIXED_DICT_LIST):
+        elif C.NUM_ROUNDS - player.round_number == len(Subsession.FIXED_DICT_LIST):
             for Game in Subsession.FIXED_DICT_LIST:
                 if Subsession.FIXED_DICT_LIST[f"fixed_round_{WhichGame}"] == Subsession.FIXED_DICT_LIST[Game]:
                     payoff_for_this_round = Subsession.FIXED_DICT_LIST[f"fixed_round_{WhichGame}"]
@@ -218,11 +232,6 @@ class DecisionPage(Page):
                 else:
                     pass
         return payoff_for_this_round
-    
-    @staticmethod
-    def CoinTossForTemplate(player: Player):
-        CoinToss = C.COINTOSS[player.round_number-1]
-        return CoinToss
 
     # Failsafe method that ensures a session continues even if we push a player to the next round.
     @staticmethod 

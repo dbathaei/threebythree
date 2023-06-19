@@ -51,10 +51,9 @@
         transform: scale(1.05);
         }
 </style>
-
     <table class="IntroTable" align="center">
         <tr>
-            <th colspan="2" rowspan="2"></th>
+            <th colspan="2" rowspan="2">{{ if 'fixed' in key_identifier }} FIXED {{ else }} {{ endif }}</th>
             
             <th colspan="4" style="font-weight: bold;"> Opponent</th>
         </tr>

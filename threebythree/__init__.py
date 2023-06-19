@@ -25,11 +25,18 @@ class C(BaseConstants):
             [1, "B"],
             [2, "C"],
         ]
+
     
+    # Randomly decides whether a fixed game or a random game should be played. 0 for fixed, 1 for random.
+    COINTOSS = []
+    for i in range(NUM_ROUNDS-5):
+        COINTOSS.append(1)
+    for i in range(5):
+        COINTOSS.append(0)
+    r.shuffle(COINTOSS)
 
-    PAYOFF_ROUND = r.randint(1, NUM_ROUNDS)
+    # Randomly decides which fixed game would be played at each round, if COINTOSS == 0.
     WHICHGAME_LIST = []
-
     WHICHGAMEVALUE = int(( NUM_ROUNDS - 5 ) / 2)
     for i in range(WHICHGAMEVALUE):
         WHICHGAME_LIST.append(i+1)
@@ -37,13 +44,7 @@ class C(BaseConstants):
     r.shuffle(WHICHGAME_LIST)
     for i in range(5):
         WHICHGAME_LIST.append(i+1)
-    
-    COINTOSS = []
-    for i in range(NUM_ROUNDS-5):
-        COINTOSS.append(1)
-    for i in range(5):
-        COINTOSS.append(0)
-    r.shuffle(COINTOSS)
+
 
 
     PAYOFF_DICT_LIST = {}
@@ -57,19 +58,26 @@ class C(BaseConstants):
     '''
     for round in range(NUM_ROUNDS):
         PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"] = {}
+
+        # The below three lines identify some aspect of the Matrix beyond just the values.
         PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"]["key_identifier"] = f"random_round_{ round + 1 }"
         PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"]["whichgame_value"] = f"game_number_{ WHICHGAME_LIST[round] }"
         PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"]["cointoss_value"] = f"coin_toss_{ COINTOSS[round] }"
+
+        # Creates the Matrices.
         for i in range(3):
             for j in range(3):
                 for k in range(2):
                     PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"][f"C{i}{j}_{k}"] = 10 * r.randint(1,9)
 
     # randomly decides which round is the one that pays the players. Is between 1 and NUM_ROUNDS inclusive.
-
+    PAYOFF_ROUND = r.randint(1, NUM_ROUNDS)
 
 
 class Subsession(BaseSubsession):
+
+    # Creates a fixed list of dictionaries for each subsession. This could be moved to 'Group' or even 'Player' based
+    # on how we would like to design the experiment.
     FIXED_DICT_LIST = {
     "fixed_round_1": {
                         "key_identifier": "fixed_round_1",
@@ -177,6 +185,8 @@ class Subsession(BaseSubsession):
                         "C22_1": 90
                     }
 }
+    
+    # Randomizes groups, removes biases due to "First-come first-serve" 
     @staticmethod
     def creating_session(subsession):
         subsession.group_randomly()
@@ -186,11 +196,17 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-
     # from C.CHOICES, we ask players for their decision.
     decision = models.IntegerField(label = "What is your choice?",
                                    choices = C.CHOICES,
                                    widget = widgets.RadioSelectHorizontal)
+    
+    # There is no 'payoff' variable attributed to the player here because otree provides us with that variable already.
+    # If we are distributing payoffs through a player's group, it would be best to do it in the 'Group' class.
+    # Other variables that come to mind:
+    # Second_Option = models.IntegerField != decision
+    # Expected Outcome = [player1.decision, player2.decision] expected by a player.
+    # etc.
 
 # PAGES
 
@@ -211,20 +227,32 @@ class DecisionPage(Page):
     # introduces the matrix "payoff_round_{player.round_number}" for each round.
     @staticmethod
     def vars_for_template(player: Player):
+
+        # These two variables grab the relevant item from the COINTOSS and WHICHGAME_LIST lists.
         CoinToss = C.COINTOSS[player.round_number-1]
-        WhichGame = C.WHICHGAME_LIST[player.round_number-1]
+        WhichGame = C.WHICHGAME_LIST[player.round_number-1] 
+
+        # To randomize based on a coin-toss.
         if CoinToss == 0 and len(Subsession.FIXED_DICT_LIST) != 0:
             for Game in Subsession.FIXED_DICT_LIST:
                 if Subsession.FIXED_DICT_LIST[f"fixed_round_{WhichGame}"] == Subsession.FIXED_DICT_LIST[Game]:
                     payoff_for_this_round = Subsession.FIXED_DICT_LIST[f"fixed_round_{WhichGame}"]
                 else:
                     pass
+        
+        # To make sure the last few rounds definitely include the fixed games if they haven't already.
+        # This is technically obsolete thanks to the design of C.COINTOSS.
+        # The condition only gets trigerred if the 'remaining number of rounds' equal the 'remaining unplayed fixed games'.
         elif C.NUM_ROUNDS - player.round_number == len(Subsession.FIXED_DICT_LIST):
-            for Game in Subsession.FIXED_DICT_LIST:
+
+            # This overwrites the entire CoinToss/WhichGame Mechanism.
+            for Game in Subsession.FIXED_DICT_LIST: 
                 if Subsession.FIXED_DICT_LIST[f"fixed_round_{WhichGame}"] == Subsession.FIXED_DICT_LIST[Game]:
                     payoff_for_this_round = Subsession.FIXED_DICT_LIST[f"fixed_round_{WhichGame}"]
                 else:
                     pass
+        
+        # taps into the random games should CoinToss == 1.
         else:
             for round in range(C.NUM_ROUNDS):
                 if player.round_number == round + 1:
@@ -251,7 +279,6 @@ class RelaxationPage(Page):
 
 # Once a player finishes their choices, they will see WaitingForCounterPart page, which basically tells them that
 # They need to wait until we find a match for them so we can calculate their payoffs.
-
 class WaitingForCounterPart(WaitPage):
 
     # Uses the html template.
@@ -282,6 +309,7 @@ class WaitingForCounterPart(WaitPage):
         # Finds player 1 & 2's payoff based on their Key (Looks something like C00_0 or C21_1)
         p1.payoff = C.PAYOFF_DICT_LIST[f"payoff_round_{C.PAYOFF_ROUND}"][p1_key]
         p2.payoff = C.PAYOFF_DICT_LIST[f"payoff_round_{C.PAYOFF_ROUND}"][p2_key]
+
 
 # Classic Results Page
 class Results(Page):

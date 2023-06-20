@@ -9,14 +9,13 @@ doc = """
 
 class C(BaseConstants):
     NAME_IN_URL = 'threebythree'
-
     # Players per group and Roles. This is so we can manipulate each player later on should we need to.
     PLAYERS_PER_GROUP = 2
     ORANGE_ROLE = 'Orange'
     GREEN_ROLE = 'Green'
-
     # For now we have a fixed number of rounds.
     NUM_ROUNDS = 15
+
 
 
     # Choices that an individual player sees. A,B,C is what they see on the screen and 0,1,2 is the input we take from them.
@@ -27,6 +26,7 @@ class C(BaseConstants):
         ]
 
     
+
     # Randomly decides whether a fixed game or a random game should be played. 0 for fixed, 1 for random.
     COINTOSS = []
     for i in range(NUM_ROUNDS-5):
@@ -34,6 +34,8 @@ class C(BaseConstants):
     for i in range(5):
         COINTOSS.append(0)
     r.shuffle(COINTOSS)
+
+
 
     # Randomly decides which fixed game would be played at each round, if COINTOSS == 0.
     WHICHGAME_LIST = []
@@ -47,35 +49,33 @@ class C(BaseConstants):
 
 
 
-    PAYOFF_DICT_LIST = {}
-    '''
-        Making C.NUM_ROUNDS different 3x3 games with accessible keys. The key's follow Cij_k style:
+    PAYOFF_DICT_LIST = {} 
+    '''Making C.NUM_ROUNDS different 3x3 games with accessible keys. The key's follow Cij_k style:
         E.g. C21_0:
         C --> 'Cell'
         i == 2 --> Player 1 decision i in [0,1,2]
         j == 1 --> Player 2 decision j in [0,1,2]
-        k == 0 --> for Player 1 decision i == 2, & Player 2 decision j == 1, we have Player 1 payoff k == 0 Player 2 payoff k == 1.
-    '''
+        k == 0 --> for Player 1 decision i == 2, & Player 2 decision j == 1, we have Player 1 payoff k == 0 Player 2 payoff k == 1. '''
     for round in range(NUM_ROUNDS):
         PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"] = {}
-
         # The below three lines identify some aspect of the Matrix beyond just the values.
         PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"]["key_identifier"] = f"random_round_{ round + 1 }"
         PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"]["whichgame_value"] = f"game_number_{ WHICHGAME_LIST[round] }"
         PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"]["cointoss_value"] = f"coin_toss_{ COINTOSS[round] }"
-
         # Creates the Matrices.
         for i in range(3):
             for j in range(3):
                 for k in range(2):
                     PAYOFF_DICT_LIST[f"payoff_round_{round + 1}"][f"C{i}{j}_{k}"] = 10 * r.randint(1,9)
 
+
     # randomly decides which round is the one that pays the players. Is between 1 and NUM_ROUNDS inclusive.
     PAYOFF_ROUND = r.randint(1, NUM_ROUNDS)
 
 
-class Subsession(BaseSubsession):
 
+
+class Subsession(BaseSubsession):
     # Creates a fixed list of dictionaries for each subsession. This could be moved to 'Group' or even 'Player' based
     # on how we would like to design the experiment.
     FIXED_DICT_LIST = {
@@ -185,19 +185,25 @@ class Subsession(BaseSubsession):
                         "C22_1": 90
                     }
 }
-    
     # Randomizes groups, removes biases due to "First-come first-serve" 
     @staticmethod
     def creating_session(subsession):
         subsession.group_randomly()
 
+
+
 class Group(BaseGroup):
     pass
 
 
+
 class Player(BasePlayer):
+    #TestInput for QuizPage. Useful for analysis.
+    quizdecision1 = models.IntegerField(min=0, max=90)
+    quizdecision2 = models.IntegerField(min=0, max=90)
+
     # from C.CHOICES, we ask players for their decision.
-    decision = models.IntegerField(label = "What is your choice?",
+    decision = models.IntegerField(label = 'You are playing as <span class="YouPlayer">Orange</span>. What do you choose to do?',
                                    choices = C.CHOICES,
                                    widget = widgets.RadioSelectHorizontal)
     
@@ -208,8 +214,11 @@ class Player(BasePlayer):
     # Expected Outcome = [player1.decision, player2.decision] expected by a player.
     # etc.
 
-# PAGES
+    # Response Time
+    # How much time they have on the waiting screen
+    # If there's wrong answer what is it, how many times it takes to get it right.
 
+# PAGES
 # Introduction Page. Only shown once at the beginning of session.
 class IntroPage(Page):
     @staticmethod
@@ -219,18 +228,39 @@ class IntroPage(Page):
         else:
             return False
 
+
+
+# Quizzes players to make sure they know the right answer.
+class QuizPage(Page):
+    form_model = "player"
+    form_fields = ["quizdecision1", "quizdecision2"]
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return True
+        else:
+            return False
+
+
+
+
+
 # Decision Page. There will be C.NUM_ROUNDS DecisionPages and C.NUM_ROUNDS decisions by/for each player.
 class DecisionPage(Page):
     form_model = "player"
     form_fields = ["decision"]
 
+
     # introduces the matrix "payoff_round_{player.round_number}" for each round.
     @staticmethod
     def vars_for_template(player: Player):
 
+
         # These two variables grab the relevant item from the COINTOSS and WHICHGAME_LIST lists.
         CoinToss = C.COINTOSS[player.round_number-1]
         WhichGame = C.WHICHGAME_LIST[player.round_number-1] 
+
 
         # To randomize based on a coin-toss.
         if CoinToss == 0 and len(Subsession.FIXED_DICT_LIST) != 0:
@@ -239,12 +269,9 @@ class DecisionPage(Page):
                     payoff_for_this_round = Subsession.FIXED_DICT_LIST[f"fixed_round_{WhichGame}"]
                 else:
                     pass
-        
-        # To make sure the last few rounds definitely include the fixed games if they haven't already.
-        # This is technically obsolete thanks to the design of C.COINTOSS.
-        # The condition only gets trigerred if the 'remaining number of rounds' equal the 'remaining unplayed fixed games'.
-        elif C.NUM_ROUNDS - player.round_number == len(Subsession.FIXED_DICT_LIST):
 
+
+        elif C.NUM_ROUNDS - player.round_number == len(Subsession.FIXED_DICT_LIST):
             # This overwrites the entire CoinToss/WhichGame Mechanism.
             for Game in Subsession.FIXED_DICT_LIST: 
                 if Subsession.FIXED_DICT_LIST[f"fixed_round_{WhichGame}"] == Subsession.FIXED_DICT_LIST[Game]:
@@ -252,6 +279,7 @@ class DecisionPage(Page):
                 else:
                     pass
         
+
         # taps into the random games should CoinToss == 1.
         else:
             for round in range(C.NUM_ROUNDS):
@@ -261,12 +289,16 @@ class DecisionPage(Page):
                     pass
         return payoff_for_this_round
 
+
     # Failsafe method that ensures a session continues even if we push a player to the next round.
     @staticmethod 
     def before_next_page(player: Player, timeout_happened):
         import random as r
         if timeout_happened:
             player.decision = r.choice(C.CHOICES)[0]
+
+
+
 
 # After each DecisionPage, there will be a RelaxationPage. This is to momentarily get the participant's mind off the last game.
 class RelaxationPage(Page):
@@ -311,16 +343,5 @@ class WaitingForCounterPart(WaitPage):
         p2.payoff = C.PAYOFF_DICT_LIST[f"payoff_round_{C.PAYOFF_ROUND}"][p2_key]
 
 
-# Classic Results Page
-class Results(Page):
 
-    # Method so this page is only relevant at the last round.
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.round_number == C.NUM_ROUNDS:
-            return True
-        else:
-            return False
-
-
-page_sequence = [IntroPage, DecisionPage, RelaxationPage, WaitingForCounterPart, Results]
+page_sequence = [IntroPage, QuizPage, DecisionPage, RelaxationPage, WaitingForCounterPart]

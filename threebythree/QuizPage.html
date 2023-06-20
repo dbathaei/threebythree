@@ -1,0 +1,213 @@
+{{ block title }}
+<div align="center">Quiz</div>
+{{ endblock }}
+
+{{ block content }}
+<style>
+    p {
+        margin-top: 2rem;
+    }
+    
+    .IntroTable {
+        width: 25rem;
+        text-align: center;
+    }
+
+    .IntroTable th, td {
+        padding: 5px;
+    }
+
+    .YouPlayer {
+        font-weight: bold;
+        color: #ff7b00;
+    }
+
+    .OpponentPlayer {
+        font-weight: bold;
+        color: #006A4E;
+    }
+
+    .ChoiceCSS {
+        margin-top: 5rem;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .ExpButton {
+        background-color: #ffeeaa;
+        border-radius: 100px;
+        box-shadow: rgba(187, 187, 44, .2) 0 -25px 18px -14px inset,rgba(187, 187, 44, .15) 0 1px 2px,rgba(187, 187, 44, .15) 0 2px 4px,rgba(187, 187, 44, .15) 0 4px 8px,rgba(187, 187, 44, .15) 0 8px 16px,rgba(187, 187, 44, .15) 0 16px 32px;
+        color: #b36200;
+        cursor: pointer;
+        display: inline-block;
+        padding: 7px 20px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 250ms;
+        border: 0;
+        font-size: 16px;
+        touch-action: manipulation;
+    }
+
+    .ExpButton:hover {
+        box-shadow: rgba(187, 187, 44,.35) 0 -25px 18px -14px inset,rgba(187, 187, 44,.25) 0 1px 2px,rgba(187, 187, 44,.25) 0 2px 4px,rgba(187, 187, 44,.25) 0 4px 8px,rgba(187, 187, 44,.25) 0 8px 16px,rgba(187, 187, 44,.25) 0 16px 32px;
+        transform: scale(1.05);
+        }
+
+        .SubmitButton {
+            background-color: #FFFFFF;
+            border: 0;
+            border-radius: .5rem;
+            box-sizing: border-box;
+            color: #111827;
+            font-family: "Inter var",ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+            font-size: .875rem;
+            font-weight: 600;
+            line-height: 1.25rem;
+            padding: .75rem 1rem;
+            text-align: center;
+            text-decoration: none #D1D5DB solid;
+            text-decoration-thickness: auto;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .SubmitButton:hover {
+            background-color: rgb(249,250,251); 
+        }
+
+        .SubmitButton:focus {
+            background-color: rgb(249,250,251); 
+            outline: 0.1px solid transparent;
+            outline-offset: 0.1px;
+        }
+
+        .SubmitButton:focus-visible {
+            box-shadow: none;
+        }
+</style>
+
+
+    <p>
+        Below are some examples of 3x3 games. In the textbox after each table, type in the correct value based on its question.
+    </p>
+
+<table class="IntroTable" align="center">
+    <tr>
+        <th class="IntroTablethtd" colspan="1" rowspan="1"></th>
+        <td class="IntroTablethtd"> <span class="OpponentPlayer">D</span> </td>
+        <td class="IntroTablethtd"> <span class="OpponentPlayer">E</span> </td>
+        <td class="IntroTablethtd"> <span class="OpponentPlayer">F</span> </td>
+    </tr>
+    <tr>
+        <td class="IntroTablethtd" style="font-weight: bold;"><span class="YouPlayer">A</span></td>
+        <td class="IntroTablethtd"><span class="YouPlayer">90</span>, <span class="OpponentPlayer">80</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">70</span>, <span class="OpponentPlayer">60</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">80</span>, <span class="OpponentPlayer">70</span> </td>
+    </tr>
+    <tr>
+        <td class="IntroTablethtd" style="font-weight: bold;"> <span class="YouPlayer">B</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">50</span>, <span class="OpponentPlayer">90</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">30</span>, <span class="OpponentPlayer">10</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">20</span>, <span class="OpponentPlayer">30</span> </td>
+    </tr>
+    <tr>
+        <td class="IntroTablethtd" style="font-weight: bold;"> <span class="YouPlayer">C</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">60</span>, <span class="OpponentPlayer">50</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">40</span>, <span class="OpponentPlayer">20</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">10</span>, <span class="OpponentPlayer">40</span> </td>
+    </tr>
+</table>
+
+
+<p>If you choose option A and the other player chooses option D, what will be your payoff?</p>
+
+<div align="center" style="text-align: center;">
+    <input class="SubmitButton" type="number" name="quizdecision1" id="quizdesicion1" placeholder="Input number here"/>
+    <button class="SubmitButton" type="button" onclick="setAnswer1()">Submit</button>
+    {{ formfield_errors "quizdecision1" }}
+</div>
+
+<div><span style="color: red" id="incorrect1">That is incorrect. Try again.</span><span style="color: green" id="correct1">That is Correct!</span></div>
+
+
+<table class="IntroTable" align="center">
+    <tr style="font-weight: bold;">
+        <th class="IntroTablethtd" colspan="1" rowspan="1"></th>
+        <td class="IntroTablethtd"> <span class="OpponentPlayer">D</span> </td>
+        <td class="IntroTablethtd"> <span class="OpponentPlayer">E</span> </td>
+        <td class="IntroTablethtd"> <span class="OpponentPlayer">F</span> </td>
+    </tr>
+    <tr>
+        <td class="IntroTablethtd" style="font-weight: bold;"><span class="YouPlayer">A</span></td>
+        <td class="IntroTablethtd"><span class="YouPlayer">90</span>, <span class="OpponentPlayer">90</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">70</span>, <span class="OpponentPlayer">30</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">50</span>, <span class="OpponentPlayer">10</span> </td>
+    </tr>
+    <tr>
+        <td class="IntroTablethtd" style="font-weight: bold;"> <span class="YouPlayer">B</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">30</span>, <span class="OpponentPlayer">70</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">80</span>, <span class="OpponentPlayer">80</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">20</span>, <span class="OpponentPlayer">20</span> </td>
+    </tr>
+    <tr>
+        <td class="IntroTablethtd" style="font-weight: bold;"> <span class="YouPlayer">C</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">10</span>, <span class="OpponentPlayer">50</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">20</span>, <span class="OpponentPlayer">20</span> </td>
+        <td class="IntroTablethtd"><span class="YouPlayer">90</span>, <span class="OpponentPlayer">90</span> </td>
+    </tr>
+</table>
+
+<p>If you choose option C and the other player chooses option E, what will be your payoff?</p>
+
+
+<div align="center" style="text-align: center;">
+    <input class="SubmitButton" type="number" name="quizdecision2" id="quizdesicion2" placeholder="Input number here"/>
+    <button class="SubmitButton" type="button" onclick="setAnswer2()">Submit</button>
+    {{ formfield_errors "quizdecision2" }}
+</div>
+
+<div><span style="color: red" id="incorrect2">That is incorrect. Try again.</span><span style="color: green" id="correct2">That is Correct!</span></div>
+
+<div class="ChoiceCSS">
+    <button class="ExpButton" id="NextButton"> Finalize choice and continue. </button>
+</div>
+
+<script>
+    document.getElementById("incorrect1").style.visibility = 'hidden';
+    document.getElementById("incorrect2").style.visibility = 'hidden';
+    document.getElementById("correct1").style.visibility = 'hidden';
+    document.getElementById("correct2").style.visibility = 'hidden';
+    function setAnswer1() {
+        var nInp1 = document.getElementById("quizdesicion1");
+        var qd1 = parseInt(nInp1.value, 10);
+        
+        if (qd1 === 90) {
+            document.getElementById("incorrect1").style.visibility = 'hidden';
+            document.getElementById("correct1").style.visibility = 'visible';
+        } else {
+            document.getElementById("incorrect1").style.visibility = 'visible';
+            document.getElementById("correct1").style.visibility = 'hidden';
+        }
+        return nInp1.value
+    }
+
+    function setAnswer2() {
+        var nInp2 = document.getElementById("quizdesicion2");
+        var qd2 = parseInt(nInp2.value, 10);
+        
+        if (qd2 === 20) {
+            document.getElementById("incorrect2").style.visibility = 'hidden';
+            document.getElementById("correct2").style.visibility = 'visible';
+            document.getElementById("quizdecision2").value = 20;
+        } else {
+            document.getElementById("incorrect2").style.visibility = 'visible';
+            document.getElementById("correct2").style.visibility = 'hidden';
+        }
+        return nInp2.value
+    }
+</script>
+{{ endblock }}

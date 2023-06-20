@@ -1,24 +1,15 @@
 {{ block title }}
-    <div align="center"> Play as Orange </div>
+<div style="visibility: hidden;">Decision Page</div>
 {{ endblock }}
 {{ block content }}
 <style>
     .IntroTable {
-        width: 30rem;
+        width: 25rem;
         text-align: center;
     }
 
     .IntroTable th, td {
-        border: 2px solid black;
         padding: 5px;
-    }
-    
-    .IntroTable th {
-        background-color: bisque;
-    }
-
-    #rotassury {
-        transform: rotate(-90deg);
     }
 
     .YouPlayer {
@@ -28,8 +19,15 @@
 
     .OpponentPlayer {
         font-weight: bold;
-        color: #4B5320;
+        color: #006A4E;
     }
+
+    .ChoiceCSS {
+        margin-top: 5rem;
+        text-align: center;
+        font-weight: 500;
+    }
+
     .ExpButton {
         background-color: #ffeeaa;
         border-radius: 100px;
@@ -51,19 +49,15 @@
         transform: scale(1.05);
         }
 </style>
+
     <table class="IntroTable" align="center">
-        <tr>
-            <th colspan="2" rowspan="2">{{ if 'fixed' in key_identifier }} FIXED {{ else }} {{ endif }}</th>
-            
-            <th colspan="4" style="font-weight: bold;"> Opponent</th>
-        </tr>
         <tr style="font-weight: bold;">
+            <th colspan="1" rowspan="1"></th>
             <td> <span class="OpponentPlayer">D</span> </td>
             <td> <span class="OpponentPlayer">E</span> </td>
             <td> <span class="OpponentPlayer">F</span> </td>
         </tr>
         <tr>
-            <th rowspan="4"> <span id="rotassury" style="font-weight: bold;">You</th>
             {{ if player.role == 'Orange' }}
             <td style="font-weight: bold;"> <span class="YouPlayer">A</span> </td>
             <td><span class="YouPlayer">{{ C00_0 }}</span>, <span class="OpponentPlayer">{{ C00_1 }}</span> </td>
@@ -103,9 +97,12 @@
             {{ endif }}
     </table>
 
-    {{ formfields }}
-    <div style="text-align: center;">
-        <button class="ExpButton" id="NextButton"> Let's keep going! </button>
+    
+    <div class="ChoiceCSS">
+        {{ formfields }}
+    </div>
+    <div class="ChoiceCSS">
+        <button class="ExpButton" id="NextButton"> Finalize choice and continue. </button>
     </div>
 <script>
     document.getElementById("NextButton").style.visibility = 'hidden';

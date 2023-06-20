@@ -1,2 +1,5 @@
 #threebythree
-3x3 game initial push.
+
+To do:
+- Record response time
+- Record 

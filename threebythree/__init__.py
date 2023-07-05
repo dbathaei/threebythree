@@ -201,6 +201,7 @@ class Player(BasePlayer):
     #TestInput for QuizPage. Useful for analysis.
     quizdecision1 = models.IntegerField(min=0, max=90)
     quizdecision2 = models.IntegerField(min=0, max=90)
+    quizdecision3 = models.IntegerField(min=0, max=90)
 
     # from C.CHOICES, we ask players for their decision.
     decision = models.IntegerField(label = 'You are playing as <span class="YouPlayer">Orange</span>. What do you choose to do?',
@@ -233,7 +234,7 @@ class IntroPage(Page):
 # Quizzes players to make sure they know the right answer.
 class QuizPage(Page):
     form_model = "player"
-    form_fields = ["quizdecision1", "quizdecision2"]
+    form_fields = ["quizdecision1", "quizdecision2", "quizdecision3"]
 
     @staticmethod
     def is_displayed(player: Player):
@@ -242,6 +243,13 @@ class QuizPage(Page):
         else:
             return False
 
+class PostQuizPage(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return True
+        else:
+            return False
 
 
 
@@ -344,4 +352,4 @@ class WaitingForCounterPart(WaitPage):
 
 
 
-page_sequence = [IntroPage, QuizPage, DecisionPage, RelaxationPage, WaitingForCounterPart]
+page_sequence = [IntroPage, QuizPage, PostQuizPage, DecisionPage, RelaxationPage, WaitingForCounterPart]

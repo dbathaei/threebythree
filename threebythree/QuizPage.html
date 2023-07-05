@@ -172,15 +172,28 @@
 
 <div><span style="color: red" id="incorrect2">That is incorrect. Try again.</span><span style="color: green" id="correct2">That is Correct!</span></div>
 
+<p>What would be the other player's payoff?</p>
+
+<div align="center" style="text-align: center;">
+    <input class="SubmitButton" type="number" name="quizdecision3" id="quizdesicion3" placeholder="Input number here"/>
+    <button class="SubmitButton" type="button" onclick="setAnswer3()">Submit</button>
+    {{ formfield_errors "quizdecision3" }}
+</div>
+
+
+<div><span style="color: red" id="incorrect3">That is incorrect. Try again.</span><span style="color: green" id="correct3">That is Correct!</span></div>
+
 <div class="ChoiceCSS">
-    <button class="ExpButton" id="NextButton"> Finalize choice and continue. </button>
+    <button class="ExpButton" id="NextButton"> Finalize choices and continue. </button>
 </div>
 
 <script>
     document.getElementById("incorrect1").style.visibility = 'hidden';
     document.getElementById("incorrect2").style.visibility = 'hidden';
+    document.getElementById("incorrect3").style.visibility = 'hidden';
     document.getElementById("correct1").style.visibility = 'hidden';
     document.getElementById("correct2").style.visibility = 'hidden';
+    document.getElementById("correct3").style.visibility = 'hidden';
     function setAnswer1() {
         var nInp1 = document.getElementById("quizdesicion1");
         var qd1 = parseInt(nInp1.value, 10);
@@ -208,6 +221,21 @@
             document.getElementById("correct2").style.visibility = 'hidden';
         }
         return nInp2.value
+    }
+
+    function setAnswer3() {
+        var nInp3 = document.getElementById("quizdesicion3");
+        var qd3 = parseInt(nInp3.value, 10);
+        
+        if (qd3 === 20) {
+            document.getElementById("incorrect3").style.visibility = 'hidden';
+            document.getElementById("correct3").style.visibility = 'visible';
+            document.getElementById("quizdecision3").value = 20;
+        } else {
+            document.getElementById("incorrect3").style.visibility = 'visible';
+            document.getElementById("correct3").style.visibility = 'hidden';
+        }
+        return nInp3.value
     }
 </script>
 {{ endblock }}
